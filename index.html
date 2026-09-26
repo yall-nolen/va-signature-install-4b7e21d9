@@ -111,11 +111,25 @@ const WEBSITE_LINE =
   `<p style="${P}">Website:&nbsp; <a href="http://www.victoryaero.net/"><span style="font-size:12.0pt;font-family:${FAMILY};color:#467886">Victory Aero</span></a></p>`;
 const BEST_REGARDS = `<p style="${P}">Best Regards, </p>`;
 
+const IMG_BASE = /^https?:/.test(location.href)
+  ? location.href.replace(/[^/]*$/, "") + "img/"
+  : "https://yall-nolen.github.io/va-signature-install-4b7e21d9/img/";
+
+const slugOf = (n) => n.toLowerCase().replace(/[^a-z]+/g, "-").replace(/^-|-$/g, "");
+
+function imgSrc(person, kind) {
+  const uri = kind === "card" ? person.card : person.headshot;
+  if (!IS_PHONE) return uri;
+  // Read the type off the data URI. Greg's headshot here is a .png and Nolen's a .jpg.
+  const ext = uri.slice(0, 20).indexOf("png") > -1 ? "png" : "jpg";
+  return IMG_BASE + slugOf(person.name) + "-" + kind + "." + ext;
+}
+
 function signatureHTML(person, withHeadshot) {
   const headshotImg = (withHeadshot && person.headshot)
-    ? `<img border="0" width="151" height="189" style="width:151px;height:189px;max-width:151px;max-height:189px" src="${person.headshot}" alt="">`
+    ? `<img border="0" width="151" height="189" style="width:151px;height:189px;max-width:151px;max-height:189px" src="${imgSrc(person, 'headshot')}" alt="">`
     : "";
-  const cardImg = `<img border="0" width="378" height="189" style="width:378px;height:189px;max-width:378px;max-height:189px" src="${person.card}" alt="">`;
+  const cardImg = `<img border="0" width="378" height="189" style="width:378px;height:189px;max-width:378px;max-height:189px" src="${imgSrc(person, 'card')}" alt="">`;
   return WEBSITE_LINE + BEST_REGARDS + `<p style="${P}">${headshotImg}${cardImg}</p>`;
 }
 
