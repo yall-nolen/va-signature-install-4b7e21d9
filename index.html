@@ -119,7 +119,6 @@ const slugOf = (n) => n.toLowerCase().replace(/[^a-z]+/g, "-").replace(/^-|-$/g,
 
 function imgSrc(person, kind) {
   const uri = kind === "card" ? person.card : person.headshot;
-  if (!IS_PHONE) return uri;
   // Read the type off the data URI. Greg's headshot here is a .png and Nolen's a .jpg.
   const ext = uri.slice(0, 20).indexOf("png") > -1 ? "png" : "jpg";
   return IMG_BASE + slugOf(person.name) + "-" + kind + "." + ext;
